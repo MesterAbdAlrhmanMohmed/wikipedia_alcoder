@@ -50,9 +50,9 @@ class Main(qt.QMainWindow):
         container=qt.QWidget()
         container.setLayout(layout)
         self.setCentralWidget(container)            
-        qt1.QShortcut("o", self).activated.connect(self.VAA)
-        qt1.QShortcut("b", self).activated.connect(self.VAB)
-        qt1.QShortcut("l", self).activated.connect(self.CL)
+        qt1.QShortcut("ctrl+o", self).activated.connect(self.VAA)
+        qt1.QShortcut("ctrl+b", self).activated.connect(self.VAB)
+        qt1.QShortcut("ctrl+l", self).activated.connect(self.CL)
         qt1.QShortcut("ctrl+q",self).activated.connect(lambda: self.البحث.setFocus())
     def search_wikipedia(self):
         if not self.البحث.text():

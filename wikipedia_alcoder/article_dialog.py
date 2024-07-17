@@ -17,10 +17,10 @@ class ArticleDialog(qt.QDialog):
         self.load_thread.update_signal.connect(self.add_paragraph)
         self.load_thread.start()
         self.article_content.setFocus()
-        qt1.QShortcut("c", self).activated.connect(self.copy_line)
-        qt1.QShortcut("a", self).activated.connect(self.copy_article)        
-        qt1.QShortcut("p",self).activated.connect(self.print_article)
-        qt1.QShortcut("s",self).activated.connect(self.save_article_as_txt)
+        qt1.QShortcut("ctrl+c", self).activated.connect(self.copy_line)
+        qt1.QShortcut("ctrl+a", self).activated.connect(self.copy_article)        
+        qt1.QShortcut("ctrl+p",self).activated.connect(self.print_article)
+        qt1.QShortcut("ctrl+s",self).activated.connect(self.save_article_as_txt)
     def add_paragraph(self, paragraph):
         for line in split_into_lines(paragraph, 100):
             self.article_content.addItem(line)

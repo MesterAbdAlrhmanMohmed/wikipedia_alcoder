@@ -19,7 +19,7 @@ class ArticleDialog(qt.QDialog):
         qt1.QShortcut("c", self).activated.connect(self.copy_line)
         qt1.QShortcut("a", self).activated.connect(self.copy_article)        
     def add_paragraph(self, paragraph):
-        for line in split_into_lines(paragraph, 200):
+        for line in split_into_lines(paragraph, 100):
             self.article_content.addItem(line)
     def copy_line(self):
         try:

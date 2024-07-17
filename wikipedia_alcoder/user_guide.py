@@ -13,5 +13,7 @@ class dialog(qt.QDialog):
         self.الدليل.addItem("B عرض المقال في المتصفح")
         self.الدليل.addItem("C نسخ سطر من المقال")
         self.الدليل.addItem("A نسخ المقال كاملا")        
+        self.الدليل.addItem("P طباعة المقال")
+        self.الدليل.addItem("S حفظ المقال كمستند نصي")
         l=qt.QVBoxLayout(self)
         l.addWidget(self.الدليل)                

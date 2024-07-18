@@ -152,11 +152,11 @@ class SpeechRecognitionThread(qt2.QThread):
     def run(self):
         recognizer=sr.Recognizer()
         with sr.Microphone() as source:
-            winsound.PlaySound("data/1.wav", winsound.SND_FILENAME)  # تشغيل صوت عند بدء التسجيل
+            winsound.PlaySound("data/1.wav", winsound.SND_FILENAME)
             audio_data = recognizer.listen(source)
         try:
             text = recognizer.recognize_google(audio_data, language=self.language)
-            winsound.PlaySound("data/2.wav", winsound.SND_FILENAME)  # تشغيل صوت عند انتهاء التسجيل
+            winsound.PlaySound("data/2.wav", winsound.SND_FILENAME)
             self.recognition_finished.emit(text)
         except sr.UnknownValueError:
             self.recognition_finished.emit("")

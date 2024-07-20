@@ -14,7 +14,7 @@ class ArticleDialog(qt.QDialog):
         self.article_content=qt.QTextEdit()
         self.article_content.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByKeyboard | Qt.TextInteractionFlag.TextSelectableByMouse)
         self.article_content.setLineWrapMode(qt.QTextEdit.LineWrapMode.NoWrap)
-        self.font_size=12
+        self.font_size=20
         font=self.font()
         font.setPointSize(self.font_size)
         self.article_content.setFont(font)

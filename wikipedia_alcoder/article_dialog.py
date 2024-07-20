@@ -83,7 +83,7 @@ class ArticleDialog(qt.QDialog):
         self.article_content.selectAll()
         font=self.article_content.font()
         font.setPointSize(self.font_size)
-        self.article_content.setCurrentFont(font)
+        self.article_content.setCurrentFont(font)        
         self.article_content.setTextCursor(cursor)
 class LoadArticleThread(qt2.QThread):
     update_signal=qt2.pyqtSignal(str)

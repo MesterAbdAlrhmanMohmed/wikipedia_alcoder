@@ -14,8 +14,9 @@ class ArticleDialog(qt.QDialog):
         self.article_content=qt.QTextEdit()
         self.article_content.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByKeyboard | Qt.TextInteractionFlag.TextSelectableByMouse)
         self.article_content.setLineWrapMode(qt.QTextEdit.LineWrapMode.NoWrap)
+        self.font_size=12
         font=self.font()
-        font.setPointSize(16)
+        font.setPointSize(self.font_size)
         self.article_content.setFont(font)
         layout=qt.QVBoxLayout()
         layout.addWidget(self.article_content)
@@ -28,6 +29,8 @@ class ArticleDialog(qt.QDialog):
         qt1.QShortcut("ctrl+a", self).activated.connect(self.copy_article)
         qt1.QShortcut("ctrl+p", self).activated.connect(self.print_article)
         qt1.QShortcut("ctrl+s", self).activated.connect(self.save_article_as_txt)
+        qt1.QShortcut("ctrl+=", self).activated.connect(self.increase_font_size)
+        qt1.QShortcut("ctrl+-", self).activated.connect(self.decrease_font_size)
     def add_paragraph(self, paragraph):
         self.article_content.append(paragraph)
         self.article_content.moveCursor(QTextCursor.MoveOperation.Start)
@@ -69,6 +72,19 @@ class ArticleDialog(qt.QDialog):
                 qt.QMessageBox.information(self, "تم", "تم حفظ المقال بنجاح")
         except Exception as error:
             qt.QMessageBox.warning(self, "تنبيه حدث خطأ", str(error))
+    def increase_font_size(self):
+        self.font_size += 1
+        self.update_font_size()
+    def decrease_font_size(self):
+        self.font_size -= 1
+        self.update_font_size()
+    def update_font_size(self):
+        cursor=self.article_content.textCursor()
+        self.article_content.selectAll()
+        font=self.article_content.font()
+        font.setPointSize(self.font_size)
+        self.article_content.setCurrentFont(font)
+        self.article_content.setTextCursor(cursor)
 class LoadArticleThread(qt2.QThread):
     update_signal=qt2.pyqtSignal(str)
     def __init__(self, title, parent=None):

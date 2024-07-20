@@ -17,5 +17,7 @@ class dialog(qt.QDialog):
         self.الدليل.addItem("CTRL+A نسخ المقال كاملا")        
         self.الدليل.addItem("CTRL+P طباعة المقال")
         self.الدليل.addItem("CTRL+S حفظ المقال كمستند نصي")
+        self.الدليل.addItem("CTRL+- تصغير حجم الخط")
+        self.الدليل.addItem("CTRL+= تكبير حجم الخط")
         l=qt.QVBoxLayout(self)
         l.addWidget(self.الدليل)                

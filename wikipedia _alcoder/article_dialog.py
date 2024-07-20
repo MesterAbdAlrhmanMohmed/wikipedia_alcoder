@@ -1,15 +1,22 @@
 from PyQt6 import QtWidgets as qt
 from PyQt6 import QtGui as qt1
 from PyQt6 import QtCore as qt2
+from PyQt6.QtCore import QEvent, Qt, QLocale
+from PyQt6.QtGui import QKeyEvent, QTextCursor
 from PyQt6.QtPrintSupport import QPrinter, QPrintDialog
-import wikipedia,pyperclip,nltk
+import wikipedia, pyperclip, nltk
 nltk.download('punkt')
 class ArticleDialog(qt.QDialog):
     def __init__(self, title, parent=None):
         super().__init__(parent)
         self.setWindowTitle(title)
         self.showFullScreen()
-        self.article_content=qt.QListWidget()
+        self.article_content=qt.QTextEdit()
+        self.article_content.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByKeyboard | Qt.TextInteractionFlag.TextSelectableByMouse)
+        self.article_content.setLineWrapMode(qt.QTextEdit.LineWrapMode.NoWrap)
+        font=self.font()
+        font.setPointSize(16)
+        self.article_content.setFont(font)
         layout=qt.QVBoxLayout()
         layout.addWidget(self.article_content)
         self.setLayout(layout)
@@ -18,40 +25,36 @@ class ArticleDialog(qt.QDialog):
         self.load_thread.start()
         self.article_content.setFocus()
         qt1.QShortcut("ctrl+c", self).activated.connect(self.copy_line)
-        qt1.QShortcut("ctrl+a", self).activated.connect(self.copy_article)        
-        qt1.QShortcut("ctrl+p",self).activated.connect(self.print_article)
-        qt1.QShortcut("ctrl+s",self).activated.connect(self.save_article_as_txt)
+        qt1.QShortcut("ctrl+a", self).activated.connect(self.copy_article)
+        qt1.QShortcut("ctrl+p", self).activated.connect(self.print_article)
+        qt1.QShortcut("ctrl+s", self).activated.connect(self.save_article_as_txt)
     def add_paragraph(self, paragraph):
-        for line in split_into_lines(paragraph,110):
-            self.article_content.addItem(line)
+        self.article_content.append(paragraph)
+        self.article_content.moveCursor(QTextCursor.MoveOperation.Start)
     def copy_line(self):
         try:
-            current_item=self.article_content.currentItem()
-            if current_item:
-                pyperclip.copy(current_item.text())
+            cursor=self.article_content.textCursor()
+            if cursor.hasSelection():
+                selected_text=cursor.selectedText()
+                pyperclip.copy(selected_text)
                 qt.QMessageBox.information(self, "تم", "تم نسخ سطر من المقال بنجاح")
         except Exception as error:
             qt.QMessageBox.warning(self, "تنبيه حدث خطأ", str(error))
     def copy_article(self):
         try:
-            article_text="\n".join(self.article_content.item(i).text() for i in range(self.article_content.count()))
+            article_text=self.article_content.toPlainText()
             pyperclip.copy(article_text)
             qt.QMessageBox.information(self, "تم", "تم نسخ المقال بنجاح")
         except Exception as error:
-            qt.QMessageBox.warning(self, "تنبيه حدث خطأ", str(error))    
+            qt.QMessageBox.warning(self, "تنبيه حدث خطأ", str(error))
     def print_article(self):
         try:
             printer=QPrinter()
             dialog=QPrintDialog(printer, self)
-            if dialog.exec()==QPrintDialog.DialogCode.Accepted:
-                painter=qt1.QPainter(printer)
-                doc=qt1.QTextDocument()
-                article_text="\n".join(self.article_content.item(i).text() for i in range(self.article_content.count()))
-                doc.setPlainText(article_text)
-                doc.drawContents(painter)
-                painter.end()            
+            if dialog.exec() == QPrintDialog.DialogCode.Accepted:
+                self.article_content.print_(printer)
         except Exception as error:
-            qt.QMessageBox.warning(self, "تنبيه حدث خطأ", str(error))    
+            qt.QMessageBox.warning(self, "تنبيه حدث خطأ", str(error))
     def save_article_as_txt(self):
         try:
             file_dialog=qt.QFileDialog()
@@ -61,7 +64,7 @@ class ArticleDialog(qt.QDialog):
             if file_dialog.exec() == qt.QFileDialog.DialogCode.Accepted:
                 file_name=file_dialog.selectedFiles()[0]
                 with open(file_name, 'w', encoding='utf-8') as file:
-                    article_text="\n".join(self.article_content.item(i).text() for i in range(self.article_content.count()))
+                    article_text = self.article_content.toPlainText()
                     file.write(article_text)
                 qt.QMessageBox.information(self, "تم", "تم حفظ المقال بنجاح")
         except Exception as error:
@@ -79,16 +82,3 @@ class LoadArticleThread(qt2.QThread):
                 self.update_signal.emit(paragraph)
         except Exception as e:
             self.update_signal.emit(f"خطأ: {str(e)}")
-def split_into_lines(paragraph, max_length):
-    words=paragraph.split()
-    lines=[]
-    current_line=""
-    for word in words:
-        if len(current_line) + len(word) + 1 <= max_length:
-            current_line+=(word + " ")
-        else:
-            lines.append(current_line)
-            current_line = word + " "
-    if current_line:
-        lines.append(current_line)
-    return lines

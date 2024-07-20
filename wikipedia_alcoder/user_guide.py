@@ -13,7 +13,7 @@ class dialog(qt.QDialog):
         self.الدليل.addItem("CTRL+O عرض المقال في التطبيق")
         self.الدليل.addItem("CTRL+B عرض المقال في المتصفح")
         self.الدليل.addItem("إختصارات نافذة عرض المقال")
-        self.الدليل.addItem("CTRL+C نسخ سطر من المقال")
+        self.الدليل.addItem("CTRL+C نسخ سطر من المقال, يجب تحديد السطر أولا")
         self.الدليل.addItem("CTRL+A نسخ المقال كاملا")        
         self.الدليل.addItem("CTRL+P طباعة المقال")
         self.الدليل.addItem("CTRL+S حفظ المقال كمستند نصي")

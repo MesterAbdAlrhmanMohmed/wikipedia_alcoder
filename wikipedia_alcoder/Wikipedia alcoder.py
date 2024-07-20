@@ -1,40 +1,41 @@
 from PyQt6 import QtWidgets as qt
 from PyQt6 import QtGui as qt1
 from PyQt6 import QtCore as qt2
-import wikipedia,webbrowser,pyperclip,winsound,about,user_guide,dic,article_dialog
+from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+import wikipedia, webbrowser, pyperclip, about, user_guide, dic, article_dialog
 import speech_recognition as sr
 class Main(qt.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Wikipedia AlCoder")
-        self.showFullScreen()            
+        self.showFullScreen()
         self.إظهار_اللغات=qt.QLabel("تحديد لغة الإدخال الصوتي")
         self.اللغات=qt.QComboBox()
         self.اللغات.setAccessibleName("تحديد لغة الإدخال الصوتي")
-        self.اللغات.addItems(dic.languages.keys())        
+        self.اللغات.addItems(dic.languages.keys())
         self.إظهار_لغات_البحث=qt.QLabel("تحديد لغة البحث")
         self.لغة_البحث=qt.QComboBox()
         self.لغة_البحث.setAccessibleName("تحديد لغة البحث")
-        self.لغة_البحث.addItems(dic.languages.keys())        
+        self.لغة_البحث.addItems(dic.languages.keys())
         self.بدء_التحدث=qt.QPushButton("بدء التحدث")
         self.بدء_التحدث.setDefault(True)
-        self.بدء_التحدث.clicked.connect(self.start_speech_recognition)        
+        self.بدء_التحدث.clicked.connect(self.start_speech_recognition)
         self.إظهار_البحث=qt.QLabel("أكتب محتوى البحث")
         self.البحث=qt.QLineEdit("")
-        self.البحث.setAccessibleName("أكتب محتوى البحث")        
+        self.البحث.setAccessibleName("أكتب محتوى البحث")
         self.بدء_البحث=qt.QPushButton("بدء البحث")
         self.بدء_البحث.setDefault(True)
-        self.بدء_البحث.clicked.connect(self.search_wikipedia)        
+        self.بدء_البحث.clicked.connect(self.search_wikipedia)
         self.نتائج_البحث=qt.QListWidget()
         self.نتائج_البحث.setAccessibleName("نتائج البحث")
         self.نتائج_البحث.setContextMenuPolicy(qt2.Qt.ContextMenuPolicy.CustomContextMenu)
-        self.نتائج_البحث.customContextMenuRequested.connect(self.show_context_menu)        
+        self.نتائج_البحث.customContextMenuRequested.connect(self.show_context_menu)
         self.الدليل=qt.QPushButton("دليل المستخدم")
         self.الدليل.clicked.connect(self.user_guide)
-        self.الدليل.setDefault(True)        
+        self.الدليل.setDefault(True)
         self.عن_المطور=qt.QPushButton("عن المطور")
         self.عن_المطور.setDefault(True)
-        self.عن_المطور.clicked.connect(self.about)        
+        self.عن_المطور.clicked.connect(self.about)
         layout=qt.QVBoxLayout()
         layout.addWidget(self.إظهار_اللغات)
         layout.addWidget(self.اللغات)
@@ -46,14 +47,14 @@ class Main(qt.QMainWindow):
         layout.addWidget(self.بدء_البحث)
         layout.addWidget(self.نتائج_البحث)
         layout.addWidget(self.الدليل)
-        layout.addWidget(self.عن_المطور)        
+        layout.addWidget(self.عن_المطور)
         container=qt.QWidget()
         container.setLayout(layout)
-        self.setCentralWidget(container)            
+        self.setCentralWidget(container)
         qt1.QShortcut("ctrl+o", self).activated.connect(self.VAA)
         qt1.QShortcut("ctrl+b", self).activated.connect(self.VAB)
         qt1.QShortcut("ctrl+l", self).activated.connect(self.CL)
-        qt1.QShortcut("ctrl+q",self).activated.connect(lambda: self.البحث.setFocus())
+        qt1.QShortcut("ctrl+q", self).activated.connect(lambda: self.البحث.setFocus())
     def search_wikipedia(self):
         if not self.البحث.text():
             qt.QMessageBox.warning(self, "تنبيه", "يرجى إدخال نص للبحث")
@@ -90,7 +91,7 @@ class Main(qt.QMainWindow):
             qt.QMessageBox.warning(self, "تنبيه", f"حدث خطأ أثناء عرض المقال في التطبيق: {e}")
     def view_in_browser(self, title):
         try:
-            url = wikipedia.page(title).url
+            url=wikipedia.page(title).url
             webbrowser.open(url)
         except Exception as e:
             qt.QMessageBox.warning(self, "تنبيه", f"حدث خطأ أثناء عرض المقال في المتصفح: {e}")
@@ -149,14 +150,22 @@ class SpeechRecognitionThread(qt2.QThread):
     def __init__(self, language, parent=None):
         super().__init__(parent)
         self.language=dic.languages[language]
+        self.player_start=QMediaPlayer()
+        self.audio_output_start=QAudioOutput()
+        self.player_start.setAudioOutput(self.audio_output_start)
+        self.player_start.setSource(qt2.QUrl.fromLocalFile("data/1.wav"))
+        self.player_end=QMediaPlayer()
+        self.audio_output_end=QAudioOutput()
+        self.player_end.setAudioOutput(self.audio_output_end)
+        self.player_end.setSource(qt2.QUrl.fromLocalFile("data/2.wav"))
     def run(self):
         recognizer=sr.Recognizer()
         with sr.Microphone() as source:
-            winsound.PlaySound("data/1.wav", winsound.SND_FILENAME)
-            audio_data = recognizer.listen(source)
+            self.player_start.play()
+            audio_data=recognizer.listen(source)
         try:
-            text = recognizer.recognize_google(audio_data, language=self.language)
-            winsound.PlaySound("data/2.wav", winsound.SND_FILENAME)
+            text=recognizer.recognize_google(audio_data, language=self.language)
+            self.player_end.play()
             self.recognition_finished.emit(text)
         except sr.UnknownValueError:
             self.recognition_finished.emit("")

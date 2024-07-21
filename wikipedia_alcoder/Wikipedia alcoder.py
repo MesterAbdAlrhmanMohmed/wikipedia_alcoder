@@ -8,7 +8,7 @@ class Main(qt.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Wikipedia AlCoder")
-        self.showFullScreen()
+        self.setGeometry(100, 100, 800, 600)
         self.إظهار_اللغات=qt.QLabel("تحديد لغة الإدخال الصوتي")
         self.اللغات=qt.QComboBox()
         self.اللغات.setAccessibleName("تحديد لغة الإدخال الصوتي")
@@ -61,7 +61,7 @@ class Main(qt.QMainWindow):
             return
         self.نتائج_البحث.clear()
         lang=dic.languages[self.لغة_البحث.currentText()]
-        self.search_thread = SearchThread(self.البحث.text(), lang)
+        self.search_thread=SearchThread(self.البحث.text(), lang)
         self.search_thread.results_signal.connect(self.display_results)
         self.search_thread.start()
     def display_results(self, results):
@@ -173,7 +173,7 @@ class SpeechRecognitionThread(qt2.QThread):
             self.recognition_finished.emit(f"خطأ في الخدمة: {e}")
         except Exception as e:
             self.recognition_finished.emit(f"خطأ غير متوقع: {e}")
-app=qt.QApplication([])
+app=qt.QApplication([])        
 app.setStyle('fusion')
 window=Main()
 window.show()

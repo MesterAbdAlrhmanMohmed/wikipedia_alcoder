@@ -68,8 +68,7 @@ class ArticleDialog(qt.QDialog):
                 file_name=file_dialog.selectedFiles()[0]
                 with open(file_name, 'w', encoding='utf-8') as file:
                     article_text = self.article_content.toPlainText()
-                    file.write(article_text)
-                qt.QMessageBox.information(self, "تم", "تم حفظ المقال بنجاح")
+                    file.write(article_text)                
         except Exception as error:
             qt.QMessageBox.warning(self, "تنبيه حدث خطأ", str(error))
     def increase_font_size(self):

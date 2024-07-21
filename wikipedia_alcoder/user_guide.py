@@ -4,7 +4,7 @@ from PyQt6 import QtCore as qt2
 class dialog(qt.QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.showFullScreen()
+        self.setGeometry(100, 100, 800, 600)
         self.setWindowTitle("دليل المستخدم")
         self.الدليل=qt.QListWidget()
         self.الدليل.addItem("إختصارات النافذة الرئسية")

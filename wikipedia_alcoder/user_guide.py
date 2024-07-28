@@ -7,7 +7,7 @@ class dialog(qt.QDialog):
         self.setGeometry(100, 100, 800, 600)
         self.setWindowTitle("دليل المستخدم")
         self.الدليل=qt.QListWidget()
-        self.الدليل.addItem("إختصارات النافذة الرئسية")
+        self.الدليل.addItem("إختصارات النافذة الرئيسية")
         self.الدليل.addItem("CTRL+Q الانتقال سريعا الى مربع البحث")
         self.الدليل.addItem("CTRL+L نسخ رابط المقال")
         self.الدليل.addItem("CTRL+O عرض المقال في التطبيق")

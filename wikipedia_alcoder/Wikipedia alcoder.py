@@ -55,6 +55,7 @@ class Main(qt.QMainWindow):
         qt1.QShortcut("ctrl+b", self).activated.connect(self.VAB)
         qt1.QShortcut("ctrl+l", self).activated.connect(self.CL)
         qt1.QShortcut("ctrl+q", self).activated.connect(lambda: self.البحث.setFocus())
+        qt1.QShortcut("ctrl+t", self).activated.connect(self.CT)
     def search_wikipedia(self):
         if not self.البحث.text():
             qt.QMessageBox.warning(self, "تنبيه", "يرجى إدخال نص للبحث")
@@ -77,9 +78,11 @@ class Main(qt.QMainWindow):
         view_article_action=context_menu.addAction("عرض المقال في التطبيق")
         view_in_browser_action=context_menu.addAction("عرض المقال في المتصفح")
         copy_link_action=context_menu.addAction("نسخ رابط المقال")
+        copy_title_action = context_menu.addAction("نسخ عنوان المقال")        
         view_article_action.triggered.connect(lambda: self.view_article(item.text()))
         view_in_browser_action.triggered.connect(lambda: self.view_in_browser(item.text()))
         copy_link_action.triggered.connect(lambda: self.copy_link(item.text()))
+        copy_title_action.triggered.connect(lambda: self.copy_title(item.text()))  # ربط الخيار بدالة نسخ العنوان
         context_menu.exec(qt1.QCursor.pos())
     def view_article(self, title):
         self.article_dialog=article_dialog.ArticleDialog(title)
@@ -112,6 +115,17 @@ class Main(qt.QMainWindow):
             self.copy_link(self.نتائج_البحث.currentItem().text())
         except Exception as e:
             qt.QMessageBox.warning(self, "تنبيه", f"حدث خطأ أثناء نسخ رابط المقال: {e}")
+    def CT(self):
+        try:
+            self.copy_title(self.نتائج_البحث.currentItem().text())
+        except Exception as e:
+            qt.QMessageBox.warning(self, "تنبيه", f"حدث خطأ أثناء نسخ عنوان المقال: {e}")
+    def copy_title(self, title):
+        try:
+            pyperclip.copy(title)
+            qt.QMessageBox.information(self, "تم", "تم نسخ عنوان المقال بنجاح")
+        except Exception as e:
+            qt.QMessageBox.warning(self, "تنبيه", f"حدث خطأ أثناء نسخ عنوان المقال: {e}")
     def about(self):
         try:
             about.dialog(self).exec()

@@ -10,6 +10,7 @@ class dialog(qt.QDialog):
         self.الدليل.addItem("إختصارات النافذة الرئيسية")
         self.الدليل.addItem("CTRL+Q الانتقال سريعا الى مربع البحث")
         self.الدليل.addItem("CTRL+L نسخ رابط المقال")
+        self.الدليل.addItem("CTRL+T نسخ عنوان المقال")
         self.الدليل.addItem("CTRL+O عرض المقال في التطبيق")
         self.الدليل.addItem("CTRL+B عرض المقال في المتصفح")
         self.الدليل.addItem("إختصارات نافذة عرض المقال")

@@ -2,7 +2,7 @@ from PyQt6 import QtWidgets as qt
 from PyQt6 import QtGui as qt1
 from PyQt6 import QtCore as qt2
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
-import wikipedia, webbrowser, pyperclip, about, user_guide, dic, article_dialog
+import wikipedia,webbrowser,pyperclip,winsound,about,user_guide,dic,article_dialog
 import speech_recognition as sr
 class Main(qt.QMainWindow):
     def __init__(self):
@@ -107,6 +107,7 @@ class Main(qt.QMainWindow):
         try:
             url=wikipedia.page(title).url
             pyperclip.copy(url)            
+            winsound.Beep(1000,100)
         except Exception as e:
             qt.QMessageBox.warning(self, "تنبيه", f"حدث خطأ أثناء نسخ رابط المقال: {e}")
     def CL(self):
@@ -122,6 +123,7 @@ class Main(qt.QMainWindow):
     def copy_title(self, title):
         try:
             pyperclip.copy(title)            
+            winsound.Beep(1000,100)
         except Exception as e:
             qt.QMessageBox.warning(self, "تنبيه", f"حدث خطأ أثناء نسخ عنوان المقال: {e}")
     def about(self):

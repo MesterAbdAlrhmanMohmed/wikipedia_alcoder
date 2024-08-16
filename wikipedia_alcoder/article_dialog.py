@@ -4,7 +4,7 @@ from PyQt6 import QtCore as qt2
 from PyQt6.QtCore import QEvent, Qt, QLocale
 from PyQt6.QtGui import QKeyEvent, QTextCursor
 from PyQt6.QtPrintSupport import QPrinter, QPrintDialog
-import wikipedia, pyperclip, nltk
+import wikipedia, pyperclip, nltk,winsound
 nltk.download('punkt')
 class ArticleDialog(qt.QDialog):
     def __init__(self, title, parent=None):
@@ -54,12 +54,14 @@ class ArticleDialog(qt.QDialog):
             if cursor.hasSelection():
                 selected_text=cursor.selectedText()
                 pyperclip.copy(selected_text)                
+                winsound.Beep(1000,100)
         except Exception as error:
             qt.QMessageBox.warning(self, "تنبيه حدث خطأ", str(error))
     def copy_article(self):
         try:
             article_text=self.article_content.toPlainText()
             pyperclip.copy(article_text)            
+            winsound.Beep(1000,100)
         except Exception as error:
             qt.QMessageBox.warning(self, "تنبيه حدث خطأ", str(error))
     def print_article(self):

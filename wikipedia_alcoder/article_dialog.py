@@ -53,7 +53,7 @@ class ArticleDialog(qt.QDialog):
             if cursor.hasSelection():
                 selected_text=cursor.selectedText()
                 pyperclip.copy(selected_text)
-                qt.QMessageBox.information(self, "تم", "تم نسخ سطر من المقال بنجاح")
+                qt.QMessageBox.information(self, "تم", "تم نسخ جزء من المقال بنجاح")
         except Exception as error:
             qt.QMessageBox.warning(self, "تنبيه حدث خطأ", str(error))
     def copy_article(self):

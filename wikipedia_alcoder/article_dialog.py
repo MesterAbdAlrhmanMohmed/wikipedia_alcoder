@@ -38,6 +38,7 @@ class ArticleDialog(qt.QDialog):
         qt1.QShortcut("ctrl+-", self).activated.connect(self.decrease_font_size)
     def open_menu(self):
         menu=qt.QMenu(self)            
+        menu.addAction("نسخ جزء من المقال", self.copy_line)
         menu.addAction("نسخ المقال", self.copy_article)
         menu.addAction("طباعة المقال", self.print_article)
         menu.addAction("حفظ المقال كملف نصي", self.save_article_as_txt)
@@ -52,15 +53,13 @@ class ArticleDialog(qt.QDialog):
             cursor=self.article_content.textCursor()
             if cursor.hasSelection():
                 selected_text=cursor.selectedText()
-                pyperclip.copy(selected_text)
-                qt.QMessageBox.information(self, "تم", "تم نسخ جزء من المقال بنجاح")
+                pyperclip.copy(selected_text)                
         except Exception as error:
             qt.QMessageBox.warning(self, "تنبيه حدث خطأ", str(error))
     def copy_article(self):
         try:
             article_text=self.article_content.toPlainText()
-            pyperclip.copy(article_text)
-            qt.QMessageBox.information(self, "تم", "تم نسخ المقال بنجاح")
+            pyperclip.copy(article_text)            
         except Exception as error:
             qt.QMessageBox.warning(self, "تنبيه حدث خطأ", str(error))
     def print_article(self):

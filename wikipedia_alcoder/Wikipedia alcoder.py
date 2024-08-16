@@ -106,8 +106,7 @@ class Main(qt.QMainWindow):
     def copy_link(self, title):
         try:
             url=wikipedia.page(title).url
-            pyperclip.copy(url)
-            qt.QMessageBox.information(self, "تم", "تم نسخ رابط المقال بنجاح")
+            pyperclip.copy(url)            
         except Exception as e:
             qt.QMessageBox.warning(self, "تنبيه", f"حدث خطأ أثناء نسخ رابط المقال: {e}")
     def CL(self):
@@ -122,8 +121,7 @@ class Main(qt.QMainWindow):
             qt.QMessageBox.warning(self, "تنبيه", f"حدث خطأ أثناء نسخ عنوان المقال: {e}")
     def copy_title(self, title):
         try:
-            pyperclip.copy(title)
-            qt.QMessageBox.information(self, "تم", "تم نسخ عنوان المقال بنجاح")
+            pyperclip.copy(title)            
         except Exception as e:
             qt.QMessageBox.warning(self, "تنبيه", f"حدث خطأ أثناء نسخ عنوان المقال: {e}")
     def about(self):
